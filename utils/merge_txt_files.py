@@ -8,13 +8,10 @@ import glob
 
 PATH = 'dataset/benchmarks/endtoend/eu'
 
-
 def build_args():
-    
     parser= argparse.ArgumentParser()
     parser.add_argument('input_path', type = str, help = 'Input path')
     parser.add_argument('')
-
 
 def get_files(_path, extension, outfile):
     out_list = []
@@ -28,15 +25,13 @@ def get_files(_path, extension, outfile):
                 o.write('{}\n'.format(','.join([el for el in _tmp] )))
     o.close()
 
-
 def main():
     PATH = 'dataset/benchmarks/endtoend/eu'
     get_files(PATH, '*.txt', outfile='outpath.csv')
     _file = pd.read_csv('outpath.csv')
-   
-    _file.columns = ['filename', 'height', 'width', 'th', 'tw', 'licence' ]
+    _file.columns = ['filename', 'x_coord', 'y_coord', 'height', 'width', 'licence' ]
     _file.to_csv('labels.csv')  
+
 if __name__ == "__main__":
     main()    
-    
     

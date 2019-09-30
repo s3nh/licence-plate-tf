@@ -43,7 +43,7 @@ def recursive parse_txt_to_dict(txt):
     pass
 
 flags = tf.app.flags
-flags.DEFINE_string('data_dir', '', 'Root directory to licence plate dataset')
+flags.DEFINE_string('csv_input', '', 'Root directory to licence plate dataset')
 flags.DEFINE_string('output_dir', '', 'Path to directory to output TFRecords')
 flags.DEFINE_string('image_dir', '', 'Path to images')
 FLAGS = flags.FLAGS
@@ -56,12 +56,10 @@ def class_text_to_int(row_label):
     else:
         None
         
-        
 def split(df, group):
     data = namedtuple('data', ['filename', 'object'])
     gb=df.groupby(group)
     return [data(filename, gb.get_group(x)) for filename, x in zip(gb.group.keys(), gb.groups)]
-
 
 def create_tf_example(group, path):
     with tf.gfile.GFile(os.path.join(path, '{}'.format(group.filename)), 'rb')  as fid:
@@ -73,14 +71,54 @@ def create_tf_example(group, path):
     
     filename = group.filename.encode('utf8')
     image_format = b'jpg'
-    xmins = []
-    xmaxs = []
-    ymins = []
-    ymaxs = []
+    x = []
+    y = []
+    height = []
+    width = []
     classes = []
-    classes_text = []
     
-    
-    
+    for index, row in group.object.iterrows():
+        x.append(row['x'])
+        height.append(row['height']) 
+        y.append(row['y'])
+        width.append(row['width'])
+        classes.append(row['class'].encode('utf8'))
+        
+    tf_example = tf.train.Example(features = tf.train.Features(
+        feature = {'image/height' : int64_feature(height), 
+                   'image/width' : int64_feature(width),
+                   'image/filename' : bytes_feature(filename), 
+                   'image/filename' : bytes_feature(encoded_jpg), 
+                   'image/format' : bytes_feature(image_format), 
+                   'image/object/bbox/xmin' : ,
+                   'image/object/bbox/ymin' : , 
+                   'image/object/bbox/xmax' : ,
+                   'image/object/bbox/ymax' : , 
+                   'image/object/class/text' :  
+                
+                   }
+    ))
+    return tf_example
 
+    
+    
+        
+    
+def main():
+    writer = tf.python_io.TFRecordWriter(FLAGS.output_dir)
+    path = os.path.join(FLAGS.image_dir)
+    examples = pd.read_csv(FLAGS.csv_input)
+    grouped = split(examples, 'filename')
+    for group in grouped:
+        tf_example = create_tf_example(group, path)
+        writer.write(tf_example.SerializeToString())
+        
+    writer.close()
+    output_path = os.path.join(os.getcwd(), FLAGS.output_path)
+    print("Succesfully created TFRecords {}".format(output_path))
+    
+    
+if __name__ == "__main__":
+    tf.app.run() 
+        
         
