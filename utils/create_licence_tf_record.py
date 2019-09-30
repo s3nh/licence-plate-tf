@@ -31,7 +31,11 @@ def bytes_feature(value):
 def bytes_list_feature(value):
     return tf.train.Feature(bytes_list = tf.train.BytesList(value = value))
 
-def recursive parse_txt_to_dict(txt):
+def float_list_feature(value):
+    return tf.train.Feature(float_list=tf.train.FloatList(value=value))
+
+
+def recursive_parse_txt_to_dict(txt):
     """
     Args:
     text: text file which contain id, boxes coordinate 
@@ -71,17 +75,17 @@ def create_tf_example(group, path):
     
     filename = group.filename.encode('utf8')
     image_format = b'jpg'
-    x = []
-    y = []
-    height = []
-    width = []
+    xmin = []
+    ymin = []
+    xmax = []
+    ymax = []
     classes = []
     
     for index, row in group.object.iterrows():
-        x.append(row['x'])
-        height.append(row['height']) 
-        y.append(row['y'])
-        width.append(row['width'])
+        xmin.append(row['x'])
+        xmax.append(row['x'] + row['height']) 
+        ymin.append(row['y'])
+        ymax.append(row['y'] + row['width'])
         classes.append(row['class'].encode('utf8'))
         
     tf_example = tf.train.Example(features = tf.train.Features(
@@ -99,10 +103,6 @@ def create_tf_example(group, path):
                    }
     ))
     return tf_example
-
-    
-    
-        
     
 def main():
     writer = tf.python_io.TFRecordWriter(FLAGS.output_dir)
