@@ -68,8 +68,8 @@ def class_text_to_int(row_label):
         
 def split(df, group):
     data = namedtuple('data', ['filename', 'object'])
-    print("DATA {}".format(data))
     gb=df.groupby(group)
+    print("Jestem przed returnem !!!") 
     return [data(filename, gb.get_group(x)) for filename, x in zip(gb.groups.keys(), gb.groups)]
 
 def create_tf_example(group, path):
@@ -89,11 +89,11 @@ def create_tf_example(group, path):
     classes = []
     
     for index, row in group.object.iterrows():
-        xmin.append(row['x'])
-        xmax.append(row['x'] + row['height']) 
-        ymin.append(row['y'])
-        ymax.append(row['y'] + row['width'])
-        classes.append(row['class'].encode('utf8'))
+        xmin.append(row['x_coord'])
+        xmax.append(row['x_coord'] + row['height']) 
+        ymin.append(row['y_coord'])
+        ymax.append(row['y_coord'] + row['width'])
+        classes.append(row['licence'].encode('utf8'))
         
     tf_example = tf.train.Example(features = tf.train.Features(
         feature = {'image/height' : int64_feature(height), 
@@ -114,12 +114,13 @@ def main(argv=None):
     path = os.path.join(FLAGS.image_dir)
     examples = pd.read_csv(FLAGS.csv_input)
     grouped = split(examples, 'filename')
+    print("GROUPED")
     for group in grouped:
         tf_example = create_tf_example(group, path)
         writer.write(tf_example.SerializeToString())
         
     writer.close()
-    output_path = os.path.join(os.getcwd(), FLAGS.output_path)
+    output_path = os.path.join(os.getcwd(), FLAGS.output_dir)
     print("Succesfully created TFRecords {}".format(output_path))
     
     
