@@ -1,20 +1,23 @@
+
+from __future__ import absolute_import  
+from __future__ import division 
+from __future__ import print_function
+
 import hashlib
+
 import io
 import logging
 import os 
 import random
 import re
-
+import pandas as pd 
 
 import contextlib2
 from lxml import etree
 import numpy as np 
 from PIL import Image
+from collections import namedtuple
 
-
-from __future__ import absolute_import  
-from __future__ import division 
-from __future__ import print_function
 
 
 import tensorflow as tf 
@@ -31,8 +34,10 @@ def bytes_feature(value):
 def bytes_list_feature(value):
     return tf.train.Feature(bytes_list = tf.train.BytesList(value = value))
 
+
 def float_list_feature(value):
     return tf.train.Feature(float_list=tf.train.FloatList(value=value))
+
 
 
 def recursive_parse_txt_to_dict(txt):
@@ -45,6 +50,7 @@ def recursive_parse_txt_to_dict(txt):
     
     """
     pass
+
 
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Root directory to licence plate dataset')
@@ -62,8 +68,9 @@ def class_text_to_int(row_label):
         
 def split(df, group):
     data = namedtuple('data', ['filename', 'object'])
+    print("DATA {}".format(data))
     gb=df.groupby(group)
-    return [data(filename, gb.get_group(x)) for filename, x in zip(gb.group.keys(), gb.groups)]
+    return [data(filename, gb.get_group(x)) for filename, x in zip(gb.groups.keys(), gb.groups)]
 
 def create_tf_example(group, path):
     with tf.gfile.GFile(os.path.join(path, '{}'.format(group.filename)), 'rb')  as fid:
@@ -94,17 +101,15 @@ def create_tf_example(group, path):
                    'image/filename' : bytes_feature(filename), 
                    'image/filename' : bytes_feature(encoded_jpg), 
                    'image/format' : bytes_feature(image_format), 
-                   'image/object/bbox/xmin' : ,
-                   'image/object/bbox/ymin' : , 
-                   'image/object/bbox/xmax' : ,
-                   'image/object/bbox/ymax' : , 
-                   'image/object/class/text' :  
-                
-                   }
+                   'image/object/bbox/xmin' : float_list_feature(xmin) ,
+                   'image/object/bbox/ymin' : float_list_feature(ymin) , 
+                   'image/object/bbox/xmax' : float_list_feature(xmax),
+                   'image/object/bbox/ymax' : float_list_feature(ymax), 
+                   'image/object/class/text' :   bytes_list_feature(classes) }
     ))
     return tf_example
     
-def main():
+def main(argv=None):
     writer = tf.python_io.TFRecordWriter(FLAGS.output_dir)
     path = os.path.join(FLAGS.image_dir)
     examples = pd.read_csv(FLAGS.csv_input)
@@ -119,6 +124,6 @@ def main():
     
     
 if __name__ == "__main__":
-    tf.app.run() 
+    tf.compat.v1.app.run(main=main) 
         
         

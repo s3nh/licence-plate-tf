@@ -30,7 +30,7 @@ def main():
     get_files(PATH, '*.txt', outfile='outpath.csv')
     _file = pd.read_csv('outpath.csv')
     _file.columns = ['filename', 'x_coord', 'y_coord', 'height', 'width', 'licence' ]
-    _file.to_csv('labels.csv')  
+    _file.to_csv('labels.csv', index=False)  
 
 if __name__ == "__main__":
     main()    
