@@ -86,6 +86,7 @@ def create_tf_example(group, path):
     ymin = []
     xmax = []
     ymax = []
+    classes_text = []
     classes = []
     
     for index, row in group.object.iterrows():
@@ -93,19 +94,21 @@ def create_tf_example(group, path):
         xmax.append(row['x_coord'] + row['height']) 
         ymin.append(row['y_coord'])
         ymax.append(row['y_coord'] + row['width'])
-        classes.append(row['licence'].encode('utf8'))
-        
+        classes_text.append(row['licence'].encode('utf8'))
+        classes.append(class_text_to_int(row['licence']))    
     tf_example = tf.train.Example(features = tf.train.Features(
         feature = {'image/height' : int64_feature(height), 
                    'image/width' : int64_feature(width),
-                   'image/filename' : bytes_feature(filename), 
-                   'image/filename' : bytes_feature(encoded_jpg), 
+                   'image/filename' : bytes_feature(filename),
+                   'image/source_id': bytes_feature(filename), 
+                   'image/encoded' : bytes_feature(encoded_jpg), 
                    'image/format' : bytes_feature(image_format), 
                    'image/object/bbox/xmin' : float_list_feature(xmin) ,
                    'image/object/bbox/ymin' : float_list_feature(ymin) , 
                    'image/object/bbox/xmax' : float_list_feature(xmax),
                    'image/object/bbox/ymax' : float_list_feature(ymax), 
-                   'image/object/class/text' :   bytes_list_feature(classes) }
+                   'image/object/class/text' :   bytes_list_feature(classes_text), 
+                   'image/object/class/label': int64_list_feature(classes) }
     ))
     return tf_example
     
