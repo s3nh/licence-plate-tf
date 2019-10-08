@@ -90,10 +90,10 @@ def create_tf_example(group, path):
     classes = []
     
     for index, row in group.object.iterrows():
-        xmin.append(row['x_coord'])
-        xmax.append(row['x_coord'] + row['height']) 
-        ymin.append(row['y_coord'])
-        ymax.append(row['y_coord'] + row['width'])
+        xmin.append(row['x_coord']/width)
+        xmax.append( (row['x_coord'] + row['height'])/width) 
+        ymin.append(row['y_coord']/height)
+        ymax.append((row['y_coord'] + row['width'])/height)
         classes_text.append(row['licence'].encode('utf8'))
         classes.append(class_text_to_int(row['licence']))    
     tf_example = tf.train.Example(features = tf.train.Features(
