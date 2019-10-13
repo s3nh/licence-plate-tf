@@ -44,5 +44,14 @@ python utils/create_licence_tf_record.py --csv_input=dataset/benchmarks/endtoend
 train, based on pipeline.config file and training files. 
 python3 models/research/object_detection/model_main.py  --logtostderr --train_dir=training/ --pipeline_config_path=training/pipeline.config
 
+#### Results after 4000 steps 
 
 
+![results](./images/detection_boxes_precision.PNG)
+
+
+
+#### Predictions 
+
+
+![results](./images/boxes_.PNG)
