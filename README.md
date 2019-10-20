@@ -55,3 +55,13 @@ python3 models/research/object_detection/model_main.py  --logtostderr --train_di
 
 
 ![results](./images/boxes_.PNG)
+
+
+
+#### Classification sample 
+
+
+
+stored into openvino/deployment_tools/inference_engine/samples/python_samples/classification_sample 
+
+
