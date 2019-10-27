@@ -77,6 +77,20 @@ object detection instance
 4. train model using chosen pretrained topology.
 5. save tf checkpoints 
 6. convert checkpoint to frozen_inference_graph 
+
+Converting to frozen_inference_graph.py 
+
+- Question: how to deal with image_tensor input_type, 
+which is probably not allowed on intel ncs2 architecture
+
+
+
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
+
+
+
 7.  convert .pb model to IR format
 8. Prepare inference engine script. 
+
+
 
