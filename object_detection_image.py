@@ -11,10 +11,10 @@ from models.research.object_detection.utils import visualization_utils as vis_ut
 # Define model and image name 
 
 MODEL_NAME = 'training/inference_graph'
-IMAGE_NAME = 'valid_.jpg' 
-PATH_TO_LABELS = 'training/object-detection.pbtxt'
+IMAGE_NAME = 'test_073.jpg' 
+PATH_TO_LABELS = 'training_mobilenet/object-detection.pbtxt'
 PATH_TO_IMAGE = IMAGE_NAME 
-PATH_TO_CKPT = 'training/inference_graph/frozen_inference_graph.pb'
+PATH_TO_CKPT = 'training_mobilenet/frozen_inference_graph.pb'
 NUM_CLASSES = 1
 
 # Label map loading 

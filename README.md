@@ -84,13 +84,33 @@ Converting to frozen_inference_graph.py
 which is probably not allowed on intel ncs2 architecture
 
 
-
+- OK
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
 
 
 
 7.  convert .pb model to IR format
+
+
+Convertion process- . 
+
+
+ python3 intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model=tf-mobilenet/training_mobilenet/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config tf-mobilenet/training_mobilenet/ssd_mobilenet_v2_licence_plate.config --reverse_input_channels
+
+
 8. Prepare inference engine script. 
 
+
+
+#REMINDER 
+-
+
+
+
+
+
+#### Properly convert  INCEPTION_V2 FASTER RCNN MODEL 
+
+ python3 intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model=tf-mobilenet/training/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config=tf-mobilenet/training/pipeline.config --reverse_input_channels --input_shape=[1,600,600,3] --log_level=DEBUG --tensorflow_use_custom_operations_config=intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support_api_v1.14.json
 
 
