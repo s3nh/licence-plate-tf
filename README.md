@@ -65,3 +65,18 @@ python3 models/research/object_detection/model_main.py  --logtostderr --train_di
 stored into openvino/deployment_tools/inference_engine/samples/python_samples/classification_sample 
 
 
+### Step by step installation 
+
+##### Darft
+
+
+1  clone tensorflow object detection api repo
+2. prepare dataset for 
+object detection instance
+3. Convert dataset to .tfrecords dataset
+4. train model using chosen pretrained topology.
+5. save tf checkpoints 
+6. convert checkpoint to frozen_inference_graph 
+7.  convert .pb model to IR format
+8. Prepare inference engine script. 
+
