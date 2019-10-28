@@ -114,3 +114,14 @@ Convertion process- .
  python3 intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model=tf-mobilenet/training/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config=tf-mobilenet/training/pipeline.config --reverse_input_channels --input_shape=[1,600,600,3] --log_level=DEBUG --tensorflow_use_custom_operations_config=intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support_api_v1.14.json
 
 
+##### COnvertion on blob_input_TF
+
+
+python3 intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model=tf-mobilenet/blob_input_TF/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config=tf-mobilenet/blob_input_TF/pipeline.config --reverse_input_channels  --log_level=DEBUG --tensorflow_use_custom_operations_config=intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support_api_v1.14.jsond
+
+
+##### Sample object detection 
+
+
+intel/openvino/inference_engine/samples/python_samples/object_detection_sample_ssd/object_detection_sample_ssd.py
+
